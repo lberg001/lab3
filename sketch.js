@@ -1,4 +1,4 @@
-let radius = 5
+let radius = 5;
 
 function setup() {
   createCanvas(400, 400);
@@ -6,9 +6,10 @@ function setup() {
 
 function draw() {
   background(220);
-  circle(width/2,height/2,50)
+  fill(255, 0, 0);
+  circle(width / 2, height / 2, 50);
 
-  if(MouseIsPressed) {
+  if (MouseIsPressed) {
     circle(mouseX, mouseY, radius);
   }
 }
