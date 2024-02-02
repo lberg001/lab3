@@ -11,5 +11,6 @@ function draw() {
 
   if (MouseIsPressed) {
     circle(mouseX, mouseY, radius);
+    // Hello can you see this?
   }
 }
