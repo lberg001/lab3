@@ -1,5 +1,16 @@
 const socket = io();
 let radius = 5;
+let balls = [];
+let spring = 0.001;
+let gravity;
+let friction = 0.99;
+let currentColor;
+let font;
+var canvas;
+function preload() {
+  font = loadFont("Minecraftia-Regular.ttf");
+  // img = loadImage("1.jpeg", 0, 0);
+}
 
 function setup() {
   if (windowWidth > windowHeight) {
@@ -8,23 +19,45 @@ function setup() {
     canvas = createCanvas(windowHeight, windowHeight);
   }
   canvas = createCanvas(windowWidth, windowHeight);
-  background(220);
+  gravity = createVector(0, 0.05);
+  currentColor = color(random(255), random(255), random(255));
+  textFont(font);
 }
 
-function draw() {}
+function draw() {
+  background("#f78ae0");
+  for (let ball of balls) {
+    ball.collide();
+    ball.move();
+    ball.edgeBounce();
+    ball.display();
+  }
+}
 
-function mouseDragged() {
+// function mouseDragged() {
+//   console.log(mouseX + "," + mouseY);
+//   fill(0);
+//   noStroke();
+//   circle(mouseX, mouseY, radius);
+//   let data = {
+//     x: mouseX,
+//     y: mouseY,
+//   };
+
+function mousePressed() {
+  balls.push(new Ball(mouseX, mouseY, 255));
   console.log(mouseX + "," + mouseY);
-  fill(0);
-  noStroke();
-  circle(mouseX, mouseY, radius);
   let data = {
     x: mouseX,
     y: mouseY,
   };
-
   // send the mouse data to the server by using name "mouse"
   socket.emit("mouse", data);
+}
+
+function keyPressed() {
+  let randomHue = random(60);
+  currentColor = color(randomHue, 60, 50);
 }
 
 socket.on("drawing", (data) => {
@@ -35,8 +68,7 @@ socket.on("drawing", (data) => {
 
 function onDrawingEvent(data) {
   noStroke();
-  fill("#6358cc");
-  circle(data.x, data.y, radius);
+  balls.push(new Ball(mouseX, mouseY, 100));
 }
 
 function windowResized() {
