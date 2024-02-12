@@ -25,7 +25,7 @@ function setup() {
 }
 
 function draw() {
-  background("#f78ae0");
+  background("#F4A5ED");
   for (let ball of balls) {
     ball.collide();
     ball.move();
