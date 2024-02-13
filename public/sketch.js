@@ -1,11 +1,11 @@
 const socket = io();
 let radius = 5;
-let balls = [];
-let spring = 0.001;
-let gravity;
-let friction = 0.99;
-let currentColor;
-let font;
+// let balls = [];
+// let spring = 0.001;
+// let gravity;
+// let friction = 0.99;
+// let currentColor;
+// let font;
 var canvas;
 let img;
 function preload() {
@@ -26,18 +26,27 @@ function setup() {
   gravity = createVector(0, 0.05);
   currentColor = color(random(255), random(255), random(255));
   textFont(font);
+  monoSynth1 = new p5.MonoSynth();
+  monoSynth2 = new p5.MonoSynth();
+  monoSynth3 = new p5.MonoSynth();
+  monoSynth4 = new p5.MonoSynth();
+  monoSynth5 = new p5.MonoSynth();
+  monoSynth6 = new p5.MonoSynth();
+  monoSynth7 = new p5.MonoSynth();
+  monoSynth8 = new p5.MonoSynth();
+  monoSynth9 = new p5.MonoSynth();
 }
 
 function draw() {
+  // background("#F4A5ED");
+  // for (let ball of balls) {
+  //   ball.collide();
+  //   ball.move();
+  //   ball.edgeBounce();
+  //   ball.display();
+  // }
   background(255,255,255);
-  imageMode(CENTER);
-  image(img,windowWidth/2,windowHeight/2);
-  for (let ball of balls) {
-    ball.collide();
-    ball.move();
-    ball.edgeBounce();
-    ball.display();
-  }
+  image(img, 320, 100);
 
   noFill();
   noStroke();
@@ -50,6 +59,12 @@ function draw() {
   rect(430,440,200,200)
   rect(630,440,200,200)
   rect(830,440,200,200)
+  // for (let ball of balls) {
+    // ball.collide();
+    // ball.move();
+    // ball.edgeBounce();
+    // ball.display();
+  // }
 }
 
 // function mouseDragged() {
@@ -63,19 +78,25 @@ function draw() {
 //   };
 
 function mousePressed() {
-  balls.push(new Ball(mouseX, mouseY, 255));
-  console.log(mouseX + "," + mouseY);
-  let data = {
-    x: mouseX,
-    y: mouseY,
-  };
-  // send the mouse data to the server by using name "mouse"
-  socket.emit("mouse", data);
+  userStartAudio();
+  // if (mouseX<(windowWidth-image.width)/2 && mouseY < (windowWidth-image.height)/2){
+    let note = random(['Fb4', 'G4', 'A5', 'B4', 'D4', 'Gb4', 'C5', 'G5', 'E4', 'Eb5']);
+    monoSynth1.play(note, 100, 0, 1);
+    // balls.push(new Ball(mouseX, mouseY, 255));
+    console.log(mouseX + "," + mouseY);
+    let data = {
+      note: note,
+      x: mouseX,
+      y: mouseY,
+    };
+    // send the mouse data to the server by using name "mouse"
+    socket.emit("mouse", data);
+  // }
 }
 
 function keyPressed() {
-  let randomHue = random(60);
-  currentColor = color(randomHue, 60, 50);
+  // let randomHue = random(60);
+  // currentColor = color(randomHue, 60, 50);
 }
 
 socket.on("drawing", (data) => {
@@ -85,8 +106,9 @@ socket.on("drawing", (data) => {
 });
 
 function onDrawingEvent(data) {
-  noStroke();
-  balls.push(new Ball(mouseX, mouseY, 100));
+  // noStroke();
+  // balls.push(new Ball(mouseX, mouseY, 100));
+  monoSynth2.play(note, 100, 0, 1);
 }
 
 function windowResized() {
