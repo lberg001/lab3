@@ -6,6 +6,8 @@ let note5;
 let note6;
 let note7;
 let note8;
+let rect1, rect2, rect3, rect4, rect5, rect6, rect7, rect8, rect9;
+let centerPoints = [];
 
 const socket = io();
 let radius = 5;
@@ -20,8 +22,6 @@ let img;
 function preload() {
   font = loadFont("Minecraftia-Regular.ttf");
   img = loadImage('face.jpeg');
-
-  // img = loadImage("1.jpeg", 0, 0);
 }
 
 function setup() {
@@ -43,6 +43,13 @@ function setup() {
   monoSynth6 = new p5.MonoSynth();
   monoSynth7 = new p5.MonoSynth();
   monoSynth8 = new p5.MonoSynth();
+
+  for (y=140; y<=400+140; y+=200){
+    for (x=530; x<=400+530; x+=200){
+      centerPoints.push(x);
+      centerPoints.push(y);
+    }
+  }
 }
 
 function draw() {
@@ -58,15 +65,15 @@ function draw() {
 
   noFill();
   noStroke();
-  rect(430,40,200,200)
-  rect(630,40,200,200)
-  rect(830,40,200,200)
-  rect(430,240,200,200)
-  rect(630,240,200,200)
-  rect(830,240,200,200)
-  rect(430,440,200,200)
-  rect(630,440,200,200)
-  rect(830,440,200,200)
+  rect1 = rect(430,40,200,200)
+  rect2 = rect(630,40,200,200)
+  rect3 = rect(830,40,200,200)
+  rect4 = rect(430,240,200,200)
+  rect5 = rect(630,240,200,200)
+  rect6 = rect(830,240,200,200)
+  rect7 = rect(430,440,200,200)
+  rect8 = rect(630,440,200,200)
+  rect9 = rect(830,440,200,200)
   // for (let ball of balls) {
     // ball.collide();
     // ball.move();
@@ -75,31 +82,26 @@ function draw() {
   // }
 }
 
-// function mouseDragged() {
-//   console.log(mouseX + "," + mouseY);
-//   fill(0);
-//   noStroke();
-//   circle(mouseX, mouseY, radius);
-//   let data = {
-//     x: mouseX,
-//     y: mouseY,
-//   };
-
-function mousePressed() {
+function mouseClicked() {
   userStartAudio();
-  // if (mouseX<(windowWidth-image.width)/2 && mouseY < (windowWidth-image.height)/2){
-    note = random(['Fb4', 'G4', 'A5', 'B4', 'D4', 'Gb4', 'C5', 'G5', 'E4', 'Eb5']);
-    monoSynth1.play(note, 100, 0, 1);
+    note1 = random(['Fb4', 'G4', 'A5', 'B4', 'D4', 'Gb4', 'C5', 'G5', 'E4', 'Eb5']);
+    let curX = mouseX;
+    let curY = mouseY;
+    for (i = 0; i < centerPoints.length; i+=2){
+      if (curX > centerPoints[i]-100 && curX < centerPoints[i] + 100 && curY > centerPoints[i+1]-100 && curY < centerPoints[i+1] + 100) {
+      // it's in the rectangle
+      monoSynth1.play(note1, 100, 0, 1);
+      }
+    }
     // balls.push(new Ball(mouseX, mouseY, 255));
     console.log(mouseX + "," + mouseY);
     let data = {
-      note: note,
+      note: note1,
       // x: mouseX,
       // y: mouseY,
     };
     // send the mouse data to the server by using name "mouse"
     socket.emit("mouse", data);
-  // }
 }
 
 function keyPressed() {
@@ -116,7 +118,7 @@ socket.on("drawing", (data) => {
 function onDrawingEvent(data) {
   // noStroke();
   // balls.push(new Ball(mouseX, mouseY, 100));
-  monoSynth2.play(note, 100, 0, 1);
+  monoSynth2.play(note2, 100, 0, 1);
 }
 
 function windowResized() {
