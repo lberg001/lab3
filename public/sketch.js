@@ -10,7 +10,7 @@ let rect1, rect2, rect3, rect4, rect5, rect6, rect7, rect8, rect9;
 let centerPoints = [];
 
 const socket = io();
-let radius = 5;
+// let radius = 5;
 // let balls = [];
 // let spring = 0.001;
 // let gravity;
