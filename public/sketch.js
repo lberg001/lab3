@@ -1,3 +1,12 @@
+let note1;
+let note2;
+let note3;
+let note4;
+let note5;
+let note6;
+let note7;
+let note8;
+
 const socket = io();
 let radius = 5;
 // let balls = [];
@@ -34,7 +43,6 @@ function setup() {
   monoSynth6 = new p5.MonoSynth();
   monoSynth7 = new p5.MonoSynth();
   monoSynth8 = new p5.MonoSynth();
-  monoSynth9 = new p5.MonoSynth();
 }
 
 function draw() {
@@ -80,7 +88,7 @@ function draw() {
 function mousePressed() {
   userStartAudio();
   // if (mouseX<(windowWidth-image.width)/2 && mouseY < (windowWidth-image.height)/2){
-    let note = random(['Fb4', 'G4', 'A5', 'B4', 'D4', 'Gb4', 'C5', 'G5', 'E4', 'Eb5']);
+    note = random(['Fb4', 'G4', 'A5', 'B4', 'D4', 'Gb4', 'C5', 'G5', 'E4', 'Eb5']);
     monoSynth1.play(note, 100, 0, 1);
     // balls.push(new Ball(mouseX, mouseY, 255));
     console.log(mouseX + "," + mouseY);
