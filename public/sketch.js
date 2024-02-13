@@ -86,8 +86,8 @@ function mousePressed() {
     console.log(mouseX + "," + mouseY);
     let data = {
       note: note,
-      x: mouseX,
-      y: mouseY,
+      // x: mouseX,
+      // y: mouseY,
     };
     // send the mouse data to the server by using name "mouse"
     socket.emit("mouse", data);
