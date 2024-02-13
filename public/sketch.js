@@ -30,13 +30,26 @@ function setup() {
 
 function draw() {
   background(255,255,255);
-  image(img, 320, 100);
+  imageMode(CENTER);
+  image(img,windowWidth/2,windowHeight/2);
   for (let ball of balls) {
     ball.collide();
     ball.move();
     ball.edgeBounce();
     ball.display();
   }
+
+  noFill();
+  noStroke();
+  rect(430,40,200,200)
+  rect(630,40,200,200)
+  rect(830,40,200,200)
+  rect(430,240,200,200)
+  rect(630,240,200,200)
+  rect(830,240,200,200)
+  rect(430,440,200,200)
+  rect(630,440,200,200)
+  rect(830,440,200,200)
 }
 
 // function mouseDragged() {
