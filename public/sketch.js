@@ -65,15 +65,6 @@ function draw() {
 
   noFill();
   noStroke();
-  rect1 = rect(430,40,200,200)
-  rect2 = rect(630,40,200,200)
-  rect3 = rect(830,40,200,200)
-  rect4 = rect(430,240,200,200)
-  rect5 = rect(630,240,200,200)
-  rect6 = rect(830,240,200,200)
-  rect7 = rect(430,440,200,200)
-  rect8 = rect(630,440,200,200)
-  rect9 = rect(830,440,200,200)
   // for (let ball of balls) {
     // ball.collide();
     // ball.move();
