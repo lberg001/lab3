@@ -7,12 +7,16 @@ let friction = 0.99;
 let currentColor;
 let font;
 var canvas;
+let img;
 function preload() {
   font = loadFont("Minecraftia-Regular.ttf");
+  img = loadImage('face.jpeg');
+
   // img = loadImage("1.jpeg", 0, 0);
 }
 
 function setup() {
+  
   if (windowWidth > windowHeight) {
     canvas = createCanvas(windowWidth, windowWidth);
   } else {
@@ -41,6 +45,14 @@ function draw() {
   //   ball.edgeBounce();
   //   ball.display();
   // }
+  background(255,255,255);
+  image(img, 320, 100);
+  for (let ball of balls) {
+    ball.collide();
+    ball.move();
+    ball.edgeBounce();
+    ball.display();
+  }
 }
 
 // function mouseDragged() {
