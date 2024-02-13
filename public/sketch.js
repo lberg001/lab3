@@ -1,11 +1,11 @@
 const socket = io();
 let radius = 5;
 // let balls = [];
-let spring = 0.001;
-let gravity;
-let friction = 0.99;
-let currentColor;
-let font;
+// let spring = 0.001;
+// let gravity;
+// let friction = 0.99;
+// let currentColor;
+// let font;
 var canvas;
 let img;
 function preload() {
@@ -47,12 +47,12 @@ function draw() {
   // }
   background(255,255,255);
   image(img, 320, 100);
-  for (let ball of balls) {
-    ball.collide();
-    ball.move();
-    ball.edgeBounce();
-    ball.display();
-  }
+  // for (let ball of balls) {
+    // ball.collide();
+    // ball.move();
+    // ball.edgeBounce();
+    // ball.display();
+  // }
 }
 
 // function mouseDragged() {
@@ -67,22 +67,24 @@ function draw() {
 
 function mousePressed() {
   userStartAudio();
-  let note = random(['Fb4', 'G4', 'A5', 'B4', 'D4', 'Gb4', 'C5', 'G5', 'E4', 'Eb5']);
-  monoSynth1.play(note, 100, 0, 1);
-  // balls.push(new Ball(mouseX, mouseY, 255));
-  console.log(mouseX + "," + mouseY);
-  let data = {
-    tone: note,
-    x: mouseX,
-    y: mouseY,
-  };
-  // send the mouse data to the server by using name "mouse"
-  socket.emit("mouse", data);
+  // if (mouseX<(windowWidth-image.width)/2 && mouseY < (windowWidth-image.height)/2){
+    let note = random(['Fb4', 'G4', 'A5', 'B4', 'D4', 'Gb4', 'C5', 'G5', 'E4', 'Eb5']);
+    monoSynth1.play(note, 100, 0, 1);
+    // balls.push(new Ball(mouseX, mouseY, 255));
+    console.log(mouseX + "," + mouseY);
+    let data = {
+      note: note,
+      x: mouseX,
+      y: mouseY,
+    };
+    // send the mouse data to the server by using name "mouse"
+    socket.emit("mouse", data);
+  // }
 }
 
 function keyPressed() {
-  let randomHue = random(60);
-  currentColor = color(randomHue, 60, 50);
+  // let randomHue = random(60);
+  // currentColor = color(randomHue, 60, 50);
 }
 
 socket.on("drawing", (data) => {
