@@ -10,13 +10,13 @@ let rect1, rect2, rect3, rect4, rect5, rect6, rect7, rect8, rect9;
 let centerPoints = [];
 
 const socket = io();
-// let radius = 5;
-// let balls = [];
-// let spring = 0.001;
-// let gravity;
-// let friction = 0.99;
-// let currentColor;
-// let font;
+let radius = 5;
+let balls = [];
+let spring = 0.001;
+let gravity;
+let friction = 0.99;
+let currentColor;
+let font;
 var canvas;
 let img;
 function preload() {
@@ -53,24 +53,25 @@ function setup() {
 }
 
 function draw() {
-  // background("#F4A5ED");
-  // for (let ball of balls) {
-  //   ball.collide();
-  //   ball.move();
-  //   ball.edgeBounce();
-  //   ball.display();
-  // }
   background(255,255,255);
-  image(img, 320, 100);
+  //image(img, 320, 100);
+
+  background("#F4A5ED");
+  for (let ball of balls) {
+    ball.collide();
+    ball.move();
+    ball.edgeBounce();
+    ball.display();
+  }
 
   noFill();
   noStroke();
-  // for (let ball of balls) {
-    // ball.collide();
-    // ball.move();
-    // ball.edgeBounce();
-    // ball.display();
-  // }
+  for (let ball of balls) {
+    ball.collide();
+    ball.move();
+    ball.edgeBounce();
+    ball.display();
+  }
 }
 
 function mouseClicked() {
@@ -84,20 +85,20 @@ function mouseClicked() {
       monoSynth1.play(note1, 100, 0, 1);
       }
     }
-    // balls.push(new Ball(mouseX, mouseY, 255));
+    balls.push(new Ball(mouseX, mouseY, 255));
     console.log(mouseX + "," + mouseY);
     let data = {
       note: note1,
-      // x: mouseX,
-      // y: mouseY,
+      x: mouseX,
+      y: mouseY,
     };
     // send the mouse data to the server by using name "mouse"
     socket.emit("mouse", data);
 }
 
 function keyPressed() {
-  // let randomHue = random(60);
-  // currentColor = color(randomHue, 60, 50);
+  let randomHue = random(60);
+  currentColor = color(randomHue, 60, 50);
 }
 
 socket.on("drawing", (data) => {
@@ -107,8 +108,8 @@ socket.on("drawing", (data) => {
 });
 
 function onDrawingEvent(data) {
-  // noStroke();
-  // balls.push(new Ball(mouseX, mouseY, 100));
+  noStroke();
+  balls.push(new Ball(mouseX, mouseY, 100));
   monoSynth2.play(note2, 100, 0, 1);
 }
 
