@@ -11,12 +11,16 @@ let spring = 0.001;
 let gravity;
 let friction = 0.99;
 let currentColor;
-let font;
+
 var canvas;
 let img;
+let topic;
+
 function preload() {
-  font = loadFont("Minecraftia-Regular.ttf");
+  
   img = loadImage('face.jpeg');
+  let emoji = loadJSON("emojis.json");
+  emojiDisplay = new EmojiDisplay(emoji);
 }
 
 function setup() {
@@ -29,11 +33,12 @@ function setup() {
   canvas = createCanvas(windowWidth, windowHeight);
   gravity = createVector(0, 0.05);
   currentColor = color(random(255), random(255), random(255));
-  textFont(font);
+ 
   for (i=0; i<9; i++) {
     synths.push(new p5.MonoSynth());
     notes.push(note);
   }
+  emojiDisplay.setup();
 
   for (y=140; y<=400+140; y+=200){
     for (x=530; x<=400+530; x+=200){
@@ -44,8 +49,10 @@ function setup() {
 }
 
 function draw() {
-
+  background(255,255,255);
   image(img, 320, 100);
+
+
   for (let ball of balls) {
     ball.collide();
     ball.move();
@@ -61,15 +68,22 @@ function draw() {
     ball.edgeBounce();
     ball.display();
   }
+
+  emo=emojiDisplay.displayEmojiCategory("Animals-Nature");
+  emojiDisplay.draw(emo[topic]);
+  console.log( emo[topic]);
 }
 
 function mouseClicked() {
   userStartAudio();
     let curX = mouseX;
     let curY = mouseY;
+
+    topic = floor(random(emo.length - 1));
+
     for (i = 0; i < centerPoints.length; i+=2){
       if (curX > centerPoints[i]-100 && curX < centerPoints[i] + 100 && curY > centerPoints[i+1]-100 && curY < centerPoints[i+1] + 100) {
-      // it's in the rectangle
+     
       notes[i] = random(['Fb4', 'G4', 'A5', 'B4', 'D4', 'Gb4', 'C5', 'G5', 'E4', 'Eb5']);
       synths[i].play(notes[i], 100, 0, 1);
       }
@@ -80,14 +94,15 @@ function mouseClicked() {
       note: notes[i],
       x: mouseX,
       y: mouseY,
+      topic: topic,
     };
-    // send the mouse data to the server by using name "mouse"
+
     socket.emit("mouse", data);
 }
 
 function keyPressed() {
-  // let randomHue = random(60);
-  // currentColor = color(randomHue, 60, 50);
+  let randomHue = random(60);
+  currentColor = color(randomHue, 60, 50);
 }
 
 socket.on("drawing", (data) => {
