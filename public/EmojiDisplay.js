@@ -14,6 +14,7 @@ class EmojiDisplay {
     }
   
     draw(emoji) {
+      this.displayText=emoji;
       textSize(50);
       textAlign(CENTER);
       text(this.displayText, 100, 100, 100);
