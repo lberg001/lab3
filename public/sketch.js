@@ -34,14 +34,6 @@ function setup() {
     synths.push(new p5.MonoSynth());
     notes.push(note);
   }
-  // monoSynth1 = new p5.MonoSynth();
-  // monoSynth2 = new p5.MonoSynth();
-  // monoSynth3 = new p5.MonoSynth();
-  // monoSynth4 = new p5.MonoSynth();
-  // monoSynth5 = new p5.MonoSynth();
-  // monoSynth6 = new p5.MonoSynth();
-  // monoSynth7 = new p5.MonoSynth();
-  // monoSynth8 = new p5.MonoSynth();
 
   for (y=140; y<=400+140; y+=200){
     for (x=530; x<=400+530; x+=200){
@@ -52,10 +44,8 @@ function setup() {
 }
 
 function draw() {
-  background(255,255,255);
-  //image(img, 320, 100);
 
-  background("#F4A5ED");
+  image(img, 320, 100);
   for (let ball of balls) {
     ball.collide();
     ball.move();
@@ -96,8 +86,8 @@ function mouseClicked() {
 }
 
 function keyPressed() {
-  let randomHue = random(60);
-  currentColor = color(randomHue, 60, 50);
+  // let randomHue = random(60);
+  // currentColor = color(randomHue, 60, 50);
 }
 
 socket.on("drawing", (data) => {
