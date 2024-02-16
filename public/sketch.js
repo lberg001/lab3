@@ -11,6 +11,7 @@ let spring = 0.001;
 let gravity;
 let friction = 0.99;
 let currentColor;
+let emoX=-20, emoY=-20;
 
 var canvas;
 let img;
@@ -25,6 +26,7 @@ function preload() {
 
 function setup() {
   
+  frameRate(60);
   if (windowWidth > windowHeight) {
     canvas = createCanvas(windowWidth, windowWidth);
   } else {
@@ -68,22 +70,21 @@ function draw() {
     ball.edgeBounce();
     ball.display();
   }
-
   emo=emojiDisplay.displayEmojiCategory("Animals-Nature");
-  emojiDisplay.draw(emo[topic]);
-  console.log( emo[topic]);
+  if(mouseIsPressed) {
+    topic = floor(random(emo.length - 1));
+    emojiDisplay.draw(emo[topic],emoX, emoY);
+  }
 }
 
 function mouseClicked() {
   userStartAudio();
     let curX = mouseX;
     let curY = mouseY;
-
-    topic = floor(random(emo.length - 1));
-
     for (i = 0; i < centerPoints.length; i+=2){
       if (curX > centerPoints[i]-100 && curX < centerPoints[i] + 100 && curY > centerPoints[i+1]-100 && curY < centerPoints[i+1] + 100) {
-     
+      emoX=centerPoints[i];
+      emoY=centerPoints[i+1];
       notes[i] = random(['Fb4', 'G4', 'A5', 'B4', 'D4', 'Gb4', 'C5', 'G5', 'E4', 'Eb5']);
       synths[i].play(notes[i], 100, 0, 1);
       }
@@ -95,6 +96,8 @@ function mouseClicked() {
       x: mouseX,
       y: mouseY,
       topic: topic,
+      emoX: emoX,
+      emoY: emoY,
     };
 
     socket.emit("mouse", data);

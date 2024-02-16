@@ -13,11 +13,11 @@ class EmojiDisplay {
       this.emojis = this.data.emojis;
     }
   
-    draw(emoji) {
+    draw(emoji, positionX, positionY) {
       this.displayText=emoji;
       textSize(50);
       textAlign(CENTER);
-      text(this.displayText, 100, 100, 100);
+      text(this.displayText, positionX, positionY);
     }
   
     displayEmojiCategory(emojiCategory) {
