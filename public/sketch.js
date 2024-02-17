@@ -1,4 +1,3 @@
-let rect1, rect2, rect3, rect4, rect5, rect6, rect7, rect8, rect9;
 let centerPoints = [];
 let synths = [];
 let newSynth;
@@ -14,19 +13,17 @@ let friction = 0.99;
 let currentColor;
 let emoX=-20, emoY=-20;
 
-var canvas;
 let img;
 let topic;
 
 function preload() {
-  
   img = loadImage('face.jpeg');
   let emoji = loadJSON("emojis.json");
   emojiDisplay = new EmojiDisplay(emoji);
 }
 
 function setup() {
-  canvas = createCanvas(windowWidth, windowHeight);
+  createCanvas(windowWidth, windowHeight);
   gravity = createVector(0, 0.05);
   currentColor = color(random(255), random(255), random(255));
  
@@ -51,7 +48,6 @@ function draw() {
   background(255);
   image(img, (windowWidth-img.width)/2,(windowHeight-img.height)/2); //making sure the image is always centered
 
-
   for (let ball of balls) {
     ball.collide();
     ball.move();
@@ -59,8 +55,6 @@ function draw() {
     ball.display();
   }
 
-  noFill();
-  noStroke();
   for (let ball of balls) {
     ball.collide();
     ball.move();
@@ -76,17 +70,17 @@ function draw() {
 
 function mouseClicked() {
   userStartAudio();
-    for (i = 0; i < centerPoints.length; i+=2){
+    for (i = 0; i < centerPoints.length; i+=2){ // here we check which face was clicked, if any
       if (mouseX > centerPoints[i]-100 && mouseX < centerPoints[i] + 100 && mouseY > centerPoints[i+1]-100 && mouseY < centerPoints[i+1] + 350) {
       emoX=centerPoints[i];
       emoY=centerPoints[i+1];
       notes[i] = random(['Fb4', 'G4', 'A5', 'B4', 'D4', 'Gb4', 'C5', 'G5', 'E4', 'Eb5']);
-      synths[i].play(notes[i], 100, 0, 2);
+      synths[i].play(notes[i], 100, 0, 2); // the synth that responds to the face that was clicked plays a random note
       }
     }
     balls.push(new Ball(mouseX, mouseY, 255));
     console.log(mouseX + "," + mouseY);
-    let data = {
+    let data = { // we pass through the socket information about the sounds and emojis
       note: notes[i],
       x: mouseX,
       y: mouseY,
@@ -96,11 +90,6 @@ function mouseClicked() {
     };
 
     socket.emit("mouse", data);
-}
-
-function keyPressed() {
-  let randomHue = random(60);
-  currentColor = color(randomHue, 60, 50);
 }
 
 socket.on("drawing", (data) => {
