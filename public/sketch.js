@@ -52,15 +52,15 @@ function setup() {
   emo = emojiDisplay.displayEmojiCategory("Animals-Nature");
 
   for (
-    y = (windowHeight - img.height) / 2 + 100;
-    y <= (windowHeight + 3 * img.height) / 2;
-    y += 187
+    y = (windowHeight - img.height) / 2 + img.height/5 ;
+    y <= windowHeight/2 +  img.height;
+    y += img.height/3
   ) {
     // determining the center points of each face to display the emojis
     for (
-      x = (windowWidth - img.width) / 2 + 100;
-      x <= (windowWidth + 3 * img.width) / 2;
-      x += 187
+      x = (windowWidth - img.width) / 2 +img.width/8;
+      x <= windowWidth/2 + img.width;
+      x += img.width/3.1
     ) {
       centerPoints.push(x);
       centerPoints.push(y);
@@ -70,20 +70,20 @@ function setup() {
 
 function draw() {
   background(255);
-  // image(img, (windowWidth - img.width) / 2, (windowHeight - img.height) / 2); //making sure the image is always centered
-  let newWidth = windowWidth;
-  let newHeight = (imgOriginalHeight / imgOriginalWidth) * newWidth;
-  if (newHeight > windowHeight) {
-    newHeight = windowHeight;
-    newWidth = (imgOriginalWidth / imgOriginalHeight) * newHeight;
-  }
-  image(
-    img,
-    (windowWidth - newWidth) / 2,
-    (windowHeight - newHeight) / 2,
-    newWidth,
-    newHeight
-  );
+  image(img, (windowWidth - img.width) / 2, (windowHeight - img.height) / 2); //making sure the image is always centered
+  // newWidth = windowWidth;
+  // newHeight = (imgOriginalHeight / imgOriginalWidth) * newWidth;
+  // if (newHeight > windowHeight) {
+  //   newHeight = windowHeight;
+  //   newWidth = (imgOriginalWidth / imgOriginalHeight) * newHeight;
+  // }
+  // image(
+  //   img,
+  //   (windowWidth - newWidth) / 2,
+  //   (windowHeight - newHeight) / 2,
+  //   newWidth,
+  //   newHeight
+  // );
   for (let ball of balls) {
     ball.collide();
     ball.move();
@@ -135,10 +135,10 @@ function mouseClicked() {
   for (i = 0; i < centerPoints.length; i += 2) {
     // here we check which face was clicked, if any
     if (
-      mouseX > centerPoints[i] - 100 &&
-      mouseX < centerPoints[i] + 100 &&
-      mouseY > centerPoints[i + 1] - 100 &&
-      mouseY < centerPoints[i + 1] + 350
+      mouseX > centerPoints[i] - img.width/6 &&
+      mouseX < centerPoints[i] + img.width/6 &&
+      mouseY > centerPoints[i + 1] - img.height/6 &&
+      mouseY < centerPoints[i + 1] + img.height/6
     ) {
       emoX = centerPoints[i];
       emoY = centerPoints[i + 1];
