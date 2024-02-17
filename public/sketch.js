@@ -17,11 +17,15 @@ let emoX = -20,
 let emoXs = [],
   emoYs = [];
 let emojis = [];
+let moving=[];
+let move;
 
 let img;
 let imgOriginalWidth;
 let imgOriginalHeight;
 let topic;
+
+let isMoving = false;
 
 function preload() {
   img = loadImage("face.jpeg", function (loadedImage) {
@@ -93,17 +97,40 @@ function draw() {
     ball.edgeBounce();
     ball.display();
   }
+  push();
+  textSize(50);
+  console.log(moving[moving.length-1]);
+  if(moving[moving.length-1]){
+    text(
+      emojis[floor(random(emojis.length - 1))],
+      emoXs[emoXs.length - 1],
+      emoYs[emoYs.length - 1]
+    );
+  }else{
+    text(
+      emojis[emojis.length - 1],
+      emoXs[emoXs.length - 1],
+      emoYs[emoYs.length - 1]
+    );
+  }
 
-  text(
-    emojis[emojis.length - 1],
-    emoXs[emoXs.length - 1],
-    emoYs[emoYs.length - 1]
-  );
-  text(emo[topic], emoY, emoY);
+  if(isMoving){
+    text(emo[floor(random(emo.length-1))], emoX, emoY);
+  }else{
+    text(emo[emo.length-1], emoX, emoY);
+  }
+  pop();
 }
 
 function mouseClicked() {
   userStartAudio();
+  if (!isMoving) {
+    isMoving = true;
+    move=true;
+  } else {
+    isMoving = false;
+    move=false;
+  }
   topic = floor(random(emo.length - 1));
   for (i = 0; i < centerPoints.length; i += 2) {
     // here we check which face was clicked, if any
@@ -131,7 +158,6 @@ function mouseClicked() {
     }
   }
   balls.push(new Ball(mouseX, mouseY, 255));
-  //console.log(mouseX + "," + mouseY);
   let data = {
     // we pass through the socket information about the sounds and emojis
     //note: notes[i],
@@ -141,8 +167,8 @@ function mouseClicked() {
     emoji: emo[topic],
     emoX: emoX,
     emoY: emoY,
+    move: move,
   };
-
   socket.emit("drawing", data);
 }
 
@@ -152,11 +178,11 @@ socket.on("drawing", (data) => {
 
 function onDrawingEvent(data) {
   noStroke();
-  //console.log(data);
   emojis.push(data.emoji);
   emoXs.push(data.emoX);
   emoYs.push(data.emoY);
   balls.push(new Ball(mouseX, mouseY, 100));
+  moving.push(data.move);
   //synths[i].play(note, 100, 0, 1);
 }
 
