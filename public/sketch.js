@@ -19,8 +19,6 @@ let emojis=[];
 let img;
 let topic;
 
-let clickPositions = []
-
 function preload() {
   img = loadImage('face.jpeg');
   let emoji = loadJSON("emojis.json");
@@ -68,22 +66,18 @@ function draw() {
     ball.display();
   }
 
-  for(let i=0;i<emojis.length;i++){
-  emojiDisplay.draw( emojis[i],emoXs[i],emoYs[i]);
-  let pos = clickPositions[i];
-  emojiDisplay.draw(topics[i],pos.x, pos.y);}
+ 
+  text( emojis[emojis.length-1],emoXs[emoXs.length-1],emoYs[emoYs.length-1]);
+  text(emo[topic],emoY, emoY);
 }
 
 function mouseClicked() {
   userStartAudio();
     topic = floor(random(emo.length - 1));
-    topics.push(emo[topic]);
     for (i = 0; i < centerPoints.length; i+=2){ // here we check which face was clicked, if any
       if (mouseX > centerPoints[i]-100 && mouseX < centerPoints[i] + 100 && mouseY > centerPoints[i+1]-100 && mouseY < centerPoints[i+1] + 350) {
       emoX=centerPoints[i];
       emoY=centerPoints[i+1];
-      let pos = createVector(emoX, emoY);
-      clickPositions.push(pos);
       notes[i] = random(['Fb4', 'G4', 'A5', 'B4', 'D4', 'Gb4', 'C5', 'G5', 'E4', 'Eb5']);
       synths[i].play(notes[i], 100, 0, 2); // the synth that responds to the face that was clicked plays a random note
       }
