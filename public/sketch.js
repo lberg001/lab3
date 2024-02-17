@@ -1,6 +1,7 @@
 let rect1, rect2, rect3, rect4, rect5, rect6, rect7, rect8, rect9;
 let centerPoints = [];
 let synths = [];
+let newSynth;
 let notes = [];
 let note;
 
@@ -25,25 +26,21 @@ function preload() {
 }
 
 function setup() {
-  
-  frameRate(60);
-  if (windowWidth > windowHeight) {
-    canvas = createCanvas(windowWidth, windowWidth);
-  } else {
-    canvas = createCanvas(windowHeight, windowHeight);
-  }
   canvas = createCanvas(windowWidth, windowHeight);
   gravity = createVector(0, 0.05);
   currentColor = color(random(255), random(255), random(255));
  
   for (i=0; i<9; i++) {
-    synths.push(new p5.MonoSynth());
+    newSynth = new p5.MonoSynth(); // we make an array of synths and notes, one per each face
+    synths.push(newSynth);
+    synths.push(0); // this is needed because the array is later read in a loop that moves in +=2
     notes.push(note);
+    notes.push(0);
   }
   emojiDisplay.setup();
 
-  for (y=140; y<=400+140; y+=200){
-    for (x=530; x<=400+530; x+=200){
+  for (y=(windowHeight-img.height)/2+100; y<=(windowHeight+3*img.height)/2; y+=187){ // determining the center points of each face to display the emojis
+    for (x=(windowWidth-img.width)/2+100; x<=(windowWidth+3*img.width)/2; x+=187){
       centerPoints.push(x);
       centerPoints.push(y);
     }
@@ -51,8 +48,8 @@ function setup() {
 }
 
 function draw() {
-  background(255,255,255);
-  image(img, 320, 100);
+  background(255);
+  image(img, (windowWidth-img.width)/2,(windowHeight-img.height)/2); //making sure the image is always centered
 
 
   for (let ball of balls) {
@@ -79,14 +76,12 @@ function draw() {
 
 function mouseClicked() {
   userStartAudio();
-    let curX = mouseX;
-    let curY = mouseY;
     for (i = 0; i < centerPoints.length; i+=2){
-      if (curX > centerPoints[i]-100 && curX < centerPoints[i] + 100 && curY > centerPoints[i+1]-100 && curY < centerPoints[i+1] + 100) {
+      if (mouseX > centerPoints[i]-100 && mouseX < centerPoints[i] + 100 && mouseY > centerPoints[i+1]-100 && mouseY < centerPoints[i+1] + 350) {
       emoX=centerPoints[i];
       emoY=centerPoints[i+1];
       notes[i] = random(['Fb4', 'G4', 'A5', 'B4', 'D4', 'Gb4', 'C5', 'G5', 'E4', 'Eb5']);
-      synths[i].play(notes[i], 100, 0, 1);
+      synths[i].play(notes[i], 100, 0, 2);
       }
     }
     balls.push(new Ball(mouseX, mouseY, 255));
@@ -118,17 +113,4 @@ function onDrawingEvent(data) {
   noStroke();
   balls.push(new Ball(mouseX, mouseY, 100));
   synths[i].play(note, 100, 0, 1);
-}
-
-function windowResized() {
-  //wipes out the history of drawing if resized, potential fix, draw to offscreen buffer
-  //https://p5js.org/reference/#/p5/createGraphics
-  resizeCanvas(windowWidth, windowHeight);
-  //ratio fix... but then need to make a bunch of other UX decisions like whether you zoom into the canvas or center it somehow
-  if (windowWidth > windowHeight) {
-    resizeCanvas(windowWidth, windowWidth);
-  } else {
-    resizeCanvas(windowHeight, windowHeight);
-  }
-  background(220);
 }
