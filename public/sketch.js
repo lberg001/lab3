@@ -12,15 +12,22 @@ let gravity;
 let friction = 0.99;
 let currentColor;
 let emo;
-let emoX=-20, emoY=-20;
-let emoXs=[], emoYs=[];
-let emojis=[];
+let emoX = -20,
+  emoY = -20;
+let emoXs = [],
+  emoYs = [];
+let emojis = [];
 
 let img;
+let imgOriginalWidth;
+let imgOriginalHeight;
 let topic;
 
 function preload() {
-  img = loadImage('face.jpeg');
+  img = loadImage("face.jpeg", function (loadedImage) {
+    imgOriginalWidth = loadedImage.width;
+    imgOriginalHeight = loadedImage.height;
+  });
   let emoji = loadJSON("emojis.json");
   emojiDisplay = new EmojiDisplay(emoji);
 }
@@ -29,8 +36,8 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   gravity = createVector(0, 0.05);
   currentColor = color(random(255), random(255), random(255));
- 
-  for (i=0; i<9; i++) {
+
+  for (i = 0; i < 9; i++) {
     newSynth = new p5.MonoSynth(); // we make an array of synths and notes, one per each face
     synths.push(newSynth);
     synths.push(0); // this is needed because the array is later read in a loop that moves in +=2
@@ -38,10 +45,19 @@ function setup() {
     notes.push(0);
   }
   emojiDisplay.setup();
-  emo=emojiDisplay.displayEmojiCategory("Animals-Nature");
+  emo = emojiDisplay.displayEmojiCategory("Animals-Nature");
 
-  for (y=(windowHeight-img.height)/2+100; y<=(windowHeight+3*img.height)/2; y+=187){ // determining the center points of each face to display the emojis
-    for (x=(windowWidth-img.width)/2+100; x<=(windowWidth+3*img.width)/2; x+=187){
+  for (
+    y = (windowHeight - img.height) / 2 + 100;
+    y <= (windowHeight + 3 * img.height) / 2;
+    y += 187
+  ) {
+    // determining the center points of each face to display the emojis
+    for (
+      x = (windowWidth - img.width) / 2 + 100;
+      x <= (windowWidth + 3 * img.width) / 2;
+      x += 187
+    ) {
       centerPoints.push(x);
       centerPoints.push(y);
     }
@@ -50,8 +66,20 @@ function setup() {
 
 function draw() {
   background(255);
-  image(img, (windowWidth-img.width)/2,(windowHeight-img.height)/2); //making sure the image is always centered
-
+  // image(img, (windowWidth - img.width) / 2, (windowHeight - img.height) / 2); //making sure the image is always centered
+  let newWidth = windowWidth;
+  let newHeight = (imgOriginalHeight / imgOriginalWidth) * newWidth;
+  if (newHeight > windowHeight) {
+    newHeight = windowHeight;
+    newWidth = (imgOriginalWidth / imgOriginalHeight) * newHeight;
+  }
+  image(
+    img,
+    (windowWidth - newWidth) / 2,
+    (windowHeight - newHeight) / 2,
+    newWidth,
+    newHeight
+  );
   for (let ball of balls) {
     ball.collide();
     ball.move();
@@ -66,35 +94,56 @@ function draw() {
     ball.display();
   }
 
- 
-  text( emojis[emojis.length-1],emoXs[emoXs.length-1],emoYs[emoYs.length-1]);
-  text(emo[topic],emoY, emoY);
+  text(
+    emojis[emojis.length - 1],
+    emoXs[emoXs.length - 1],
+    emoYs[emoYs.length - 1]
+  );
+  text(emo[topic], emoY, emoY);
 }
 
 function mouseClicked() {
   userStartAudio();
-    topic = floor(random(emo.length - 1));
-    for (i = 0; i < centerPoints.length; i+=2){ // here we check which face was clicked, if any
-      if (mouseX > centerPoints[i]-100 && mouseX < centerPoints[i] + 100 && mouseY > centerPoints[i+1]-100 && mouseY < centerPoints[i+1] + 350) {
-      emoX=centerPoints[i];
-      emoY=centerPoints[i+1];
-      notes[i] = random(['Fb4', 'G4', 'A5', 'B4', 'D4', 'Gb4', 'C5', 'G5', 'E4', 'Eb5']);
+  topic = floor(random(emo.length - 1));
+  for (i = 0; i < centerPoints.length; i += 2) {
+    // here we check which face was clicked, if any
+    if (
+      mouseX > centerPoints[i] - 100 &&
+      mouseX < centerPoints[i] + 100 &&
+      mouseY > centerPoints[i + 1] - 100 &&
+      mouseY < centerPoints[i + 1] + 350
+    ) {
+      emoX = centerPoints[i];
+      emoY = centerPoints[i + 1];
+      notes[i] = random([
+        "Fb4",
+        "G4",
+        "A5",
+        "B4",
+        "D4",
+        "Gb4",
+        "C5",
+        "G5",
+        "E4",
+        "Eb5",
+      ]);
       synths[i].play(notes[i], 100, 0, 2); // the synth that responds to the face that was clicked plays a random note
-      }
     }
-    balls.push(new Ball(mouseX, mouseY, 255));
-    //console.log(mouseX + "," + mouseY);
-    let data = { // we pass through the socket information about the sounds and emojis
-      //note: notes[i],
-      x: mouseX,
-      y: mouseY,
-      topic: topic,
-      emoji:emo[topic],
-      emoX: emoX,
-      emoY: emoY,
-    };
+  }
+  balls.push(new Ball(mouseX, mouseY, 255));
+  //console.log(mouseX + "," + mouseY);
+  let data = {
+    // we pass through the socket information about the sounds and emojis
+    //note: notes[i],
+    x: mouseX,
+    y: mouseY,
+    topic: topic,
+    emoji: emo[topic],
+    emoX: emoX,
+    emoY: emoY,
+  };
 
-    socket.emit("drawing", data);
+  socket.emit("drawing", data);
 }
 
 socket.on("drawing", (data) => {
@@ -109,4 +158,8 @@ function onDrawingEvent(data) {
   emoYs.push(data.emoY);
   balls.push(new Ball(mouseX, mouseY, 100));
   //synths[i].play(note, 100, 0, 1);
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
 }
