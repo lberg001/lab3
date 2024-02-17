@@ -16,7 +16,7 @@ server.listen(3000, () => {
 io.on("connection", (socket) => {
   console.log("a user connected : " + socket.id);
   socket.on("mouse", (data) => {
-    console.log(data);
+    // console.log(data);
     socket.broadcast.emit("drawing", data);
   });
 });

@@ -11,7 +11,7 @@ class Ball {
 
   getRandomLetter() {
     let letters =
-      "1 of on 0 ^ & * am a yes machine index #3 . ! no oo hI u '' can function butterfly butter fly".split(
+      "😊 🙃 🤪 🤓 🤯 😴 💩 👻 👽 🤖 👾 👐 🖖 ✌️ 🤟 🤘 🤙 👋 🐭 🦕 🦖 🐉 ".split(
         " "
       );
     return random(letters);
